@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+--help/
+
+md_output/
+docling_models/
+*_images/
+
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+Thumbs.db
+desktop.ini
