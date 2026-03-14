@@ -362,8 +362,7 @@ MIT
 
 ---
 
-## Support
+## Support / Contact
 
-Commercial users who find value in this tool are encouraged to sponsor the project.
-
-Enjoy.
+- Bug reports and feature requests: open a GitHub Issue
+- Questions and ideas: use GitHub Discussions
