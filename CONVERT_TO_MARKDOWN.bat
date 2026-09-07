@@ -42,10 +42,25 @@ if errorlevel 1 (
     exit /b 0
 )
 
+set "VENV_DIR=%~dp0.venv"
+set "VENV_PYTHON=%VENV_DIR%\Scripts\python.exe"
+
+if not exist "%VENV_PYTHON%" (
+    set "PROGRESS=20"
+    call :progress "Creating local virtual environment"
+    python -m venv "%VENV_DIR%"
+    if errorlevel 1 (
+        echo.
+        echo ERROR: Failed to create virtual environment.
+        pause
+        exit /b 1
+    )
+)
+
 set "PROGRESS=35"
 call :progress "Installing Python libraries"
-python -m pip install --upgrade pip --quiet --no-warn-script-location
-python -m pip install -r requirements.txt --quiet --no-warn-script-location
+"%VENV_PYTHON%" -m pip install --upgrade pip --quiet --no-warn-script-location
+"%VENV_PYTHON%" -m pip install -r requirements.txt --quiet --no-warn-script-location
 if errorlevel 1 (
     echo.
     echo ERROR: Failed to install required libraries.
@@ -55,7 +70,7 @@ if errorlevel 1 (
 
 set "PROGRESS=65"
 call :progress "Preparing Docling OCR models"
-python prepare_models.py "%~dp0docling_models"
+"%VENV_PYTHON%" prepare_models.py "%~dp0docling_models"
 if errorlevel 1 (
     echo.
     echo ERROR: Failed to prepare Docling models.
@@ -67,7 +82,7 @@ set "PROGRESS=85"
 call :progress "Starting conversion"
 echo Tip: Press Ctrl+C if conversion is too slow and you want to stop.
 echo.
-python convert_to_markdown.py
+"%VENV_PYTHON%" convert_to_markdown.py
 if errorlevel 1 (
     echo.
     echo ERROR: Conversion failed. See message above.
