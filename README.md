@@ -148,7 +148,7 @@ Download from [python.org](https://www.python.org/downloads/).
 pip install -r requirements.txt
 ```
 
-For contributors running tests:
+For contributors running tests (no Docling install required):
 
 ```bash
 pip install -r requirements-dev.txt
@@ -359,8 +359,8 @@ These services are usually easier on a weak local machine because the heavy proc
 | `scan_to_markdown_docling.py` | Internal converter implementation |
 | `prepare_docling_models.py` | Internal model-setup implementation |
 | `requirements.txt` | Python dependencies |
-| `requirements-dev.txt` | Runtime deps plus pytest for contributors |
-| `tests/` | Light unit tests (no Docling OCR run required) |
+| `requirements-dev.txt` | Light test deps (pytest + extractors, no Docling) |
+| `tests/` | Unit tests; importing the converter does not load Docling |
 | `CONVERT_TO_MARKDOWN.bat` | Windows installer/runner (uses local `.venv`) |
 | `README.md` | Project documentation |
 

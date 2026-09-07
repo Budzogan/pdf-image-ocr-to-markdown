@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import fitz
 
-from scan_to_markdown_docling import _pdf_has_embedded_text
+from scan_to_markdown_docling import _convert_pdf_with_best_path, _pdf_has_embedded_text
 
 
 def test_pdf_has_embedded_text_true(tmp_path):
@@ -27,3 +27,20 @@ def test_pdf_has_embedded_text_false_for_blank(tmp_path):
     doc.save(str(path))
     doc.close()
     assert _pdf_has_embedded_text(path) is False
+
+
+def test_text_pdf_path_does_not_prewrite_output(tmp_path):
+    path = tmp_path / "with_text.pdf"
+    doc = fitz.open()
+    page = doc.new_page()
+    page.insert_text(
+        (72, 72),
+        "This is a sample document with enough words to count as usable text content for detection.",
+    )
+    doc.save(str(path))
+    doc.close()
+
+    content, already_written = _convert_pdf_with_best_path(path, tmp_path, pdf_mode="text")
+    assert already_written is False
+    assert content
+    assert "sample document" in content
