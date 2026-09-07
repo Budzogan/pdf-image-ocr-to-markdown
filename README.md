@@ -47,11 +47,11 @@ If you just want to use it:
 
 1. Put your `.pdf`, `.png`, `.jpg`, `.jpeg`, `.tiff`, `.bmp`, `.webp`, or `.docx` files in this folder.
 2. Double-click `CONVERT_TO_MARKDOWN.bat`.
-3. Wait while it installs Python libraries and checks or prepares the local Docling OCR models.
+3. Wait while it creates a local `.venv` (if needed), installs Python libraries into that venv, and checks or prepares the local Docling OCR models.
 4. If Windows asks for permission, allow it.
 5. Your Markdown files will appear in the `md_output\` folder.
 
-Setup can still take a while because Docling and its OCR/layout models are checked and downloaded if needed for scanned-PDF and image cases.
+Setup can still take a while because Docling and its OCR/layout models are checked and downloaded if needed for scanned-PDF and image cases. The batch file keeps dependencies in `.venv` so your global Python stays untouched.
 
 ---
 
@@ -148,6 +148,13 @@ Download from [python.org](https://www.python.org/downloads/).
 pip install -r requirements.txt
 ```
 
+For contributors running tests:
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
 ### 3. Prepare the local Docling models
 
 ```bash
@@ -163,10 +170,11 @@ python prepare_models.py
 What the batch file does:
 
 1. Checks whether Python is installed.
-2. Installs missing Python libraries.
-3. Downloads/checks the local Docling models needed by this project.
-4. Converts all supported files in the folder automatically.
-5. Opens the output folder when finished.
+2. Creates a local `.venv` if it does not already exist.
+3. Installs missing Python libraries into that venv (not your global Python).
+4. Downloads/checks the local Docling models needed by this project.
+5. Converts all supported files in the folder automatically.
+6. Opens the output folder when finished.
 
 ### Option B - Command line
 
@@ -335,7 +343,7 @@ These services are usually easier on a weak local machine because the heavy proc
 ## Notes
 
 - This project intentionally avoids Docling VLM workflows to keep resource usage more predictable.
-- The batch file uses step percentages for install/setup progress.
+- The batch file uses step percentages for install/setup progress and installs into a local `.venv`.
 - Models are cached locally in `docling_models\` for this project.
 - This project intentionally pre-downloads only the local models it actually uses: layout, table structure, and ONNXRuntime RapidOCR.
 - PDF auto mode checks whether a PDF appears to contain embedded text before sending it to OCR.
@@ -351,7 +359,9 @@ These services are usually easier on a weak local machine because the heavy proc
 | `scan_to_markdown_docling.py` | Internal converter implementation |
 | `prepare_docling_models.py` | Internal model-setup implementation |
 | `requirements.txt` | Python dependencies |
-| `CONVERT_TO_MARKDOWN.bat` | Windows installer/runner |
+| `requirements-dev.txt` | Runtime deps plus pytest for contributors |
+| `tests/` | Light unit tests (no Docling OCR run required) |
+| `CONVERT_TO_MARKDOWN.bat` | Windows installer/runner (uses local `.venv`) |
 | `README.md` | Project documentation |
 
 ---
